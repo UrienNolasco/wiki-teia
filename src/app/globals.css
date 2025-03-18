@@ -2,6 +2,15 @@
 
 @plugin "tailwindcss-animate";
 
+@font-face {
+  font-family: "Tan Mon Cheri";
+  src: url("/fonts/tan-mon-cheri.woff2") format("woff2"),
+    url("/fonts/tan-mon-cheri.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
