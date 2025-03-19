@@ -20,7 +20,7 @@
     tipo                                TipoUsuario
     Devolutiva_Devolutiva_alunoIdToUser Devolutiva[]
     ProgressoVideo                      ProgressoVideo[]
-    Avaliacoes                          Avaliacoes[]
+    Avaliacao                           Avaliacao[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -84,74 +84,61 @@
     Rejeitado
   }
 
-  model Modulo {
-    id           String        @id @default(uuid())
-    nome         String        @unique @db.VarChar(255)
-    capacitacoes Capacitacao[]
-    workshops    Workshop[]
+  model Formacao {
+  id           String         @id @default(uuid())
+  nome         String         @unique @db.VarChar(255)
+  capacitacoes Capacitacao[]  // Uma formação tem muitas capacitações
+}
 
-    @@map("modulos")
-  }
+model Capacitacao {
+  id          String      @id @default(uuid())
+  nome        String      @db.VarChar(255)
+  link_video  String?
+  formacaoId  String
+  formacao    Formacao    @relation(fields: [formacaoId], references: [id], onDelete: Cascade)
+  workshops   Workshop[]  // Uma capacitação tem muitos workshops
+}
 
-  model Capacitacao {
-    id         String     @id @default(uuid())
-    nome       String     @db.VarChar(255)
-    link_video String?
-    moduloId   String
-    modulo     Modulo     @relation(fields: [moduloId], references: [id], onDelete: Cascade)
-    workshops  Workshop[]
+model Workshop {
+  id            String       @id @default(uuid())
+  nome          String       @db.VarChar(255)
+  capacitacaoId String
+  link_video  String?
+  capacitacao   Capacitacao  @relation(fields: [capacitacaoId], references: [id], onDelete: Cascade)
+  devolutivas   Devolutiva[] // Um workshop tem muitas devolutivas
+}
 
-    @@map("capacitacoes")
-  }
+model Devolutiva {
+  id            String           @id @default(uuid())
+  workshopId    String
+  alunoId       String
+  tipo          TipoDevolutiva
+  arquivo_url   String
+  status        StatusDevolutiva @default(Enviado)
+  duracao_video Int?
+  workshop      Workshop         @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  aluno         User             @relation(fields: [alunoId], references: [id], onDelete: Cascade)
+  progresso     ProgressoVideo[]
+  avaliacao     Avaliacao[]
+}
 
-  model Workshop {
-    id            String       @id @default(uuid())
-    nome          String       @db.VarChar(255)
-    moduloId      String?
-    capacitacaoId String?
-    modulo        Modulo?      @relation(fields: [moduloId], references: [id], onDelete: Cascade)
-    capacitacao   Capacitacao? @relation(fields: [capacitacaoId], references: [id], onDelete: Cascade)
-    devolutivas   Devolutiva[]
+// Outros modelos mantidos com nomes no singular:
+model ProgressoVideo {
+  id                 String     @id @default(uuid())
+  devolutivaId       String
+  usuarioId          String
+  tempo_assistido    Int
+  ultima_atualizacao DateTime   @default(now())
+  devolutiva         Devolutiva @relation(fields: [devolutivaId], references: [id], onDelete: Cascade)
+  usuario            User       @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+}
 
-    @@map("workshops")
-  }
-
-  model Devolutiva {
-    id            String           @id @default(uuid())
-    workshopId    String
-    alunoId       String
-    tipo          TipoDevolutiva
-    arquivo_url   String
-    status        StatusDevolutiva @default(Enviado)
-    duracao_video Int?
-    workshop      Workshop         @relation(fields: [workshopId], references: [id], onDelete: Cascade)
-    aluno         User             @relation(fields: [alunoId], references: [id], onDelete: Cascade)
-    progressos    ProgressoVideo[]
-    avaliacoes    Avaliacoes[]
-
-    @@map("devolutivas")
-  }
-
-  model ProgressoVideo {
-    id                 String     @id @default(uuid())
-    devolutivaId       String
-    usuarioId          String
-    tempo_assistido    Int
-    ultima_atualizacao DateTime   @default(now())
-    devolutiva         Devolutiva @relation(fields: [devolutivaId], references: [id], onDelete: Cascade)
-    usuario            User       @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
-
-    @@map("progresso_video")
-  }
-
-  model Avaliacoes {
-    id           String     @id @default(uuid())
-    devolutivaId String
-    avaliadorId  String
-    nota         Decimal    @db.Decimal(3, 1)
-    comentario   String?
-    devolutiva   Devolutiva @relation(fields: [devolutivaId], references: [id], onDelete: Cascade)
-    avaliador    User       @relation(fields: [avaliadorId], references: [id], onDelete: Cascade)
-
-    @@map("avaliacoes")
-  }
+model Avaliacao {
+  id           String     @id @default(uuid())
+  devolutivaId String
+  avaliadorId  String
+  nota         Decimal    @db.Decimal(3, 1)
+  comentario   String?
+  devolutiva   Devolutiva @relation(fields: [devolutivaId], references: [id], onDelete: Cascade)
+  avaliador    User       @relation(fields: [avaliadorId], references: [id], onDelete: Cascade)
+}

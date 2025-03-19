@@ -1,58 +1,100 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // Workshop 1: Dividido em módulos
-  const moduloWorkshop = await prisma.modulo.create({
+  // Criar Formação SD
+  const formacaoSD = await prisma.formacao.create({
     data: {
-      nome: "Módulo Workshop 1",
+      nome: "Formação SD",
       capacitacoes: {
         create: [
           {
-            nome: "Capacitação A1",
-            link_video: "https://example.com/video-a1",
+            nome: "Capacitação de Negócios",
+            workshops: {
+              create: [
+                {
+                  nome: "01. Conceitos iniciais SAP",
+                  link_video: "https://video.plataforma/sd-conceitos-iniciais",
+                },
+                {
+                  nome: "02. Business Partner",
+                  link_video: "https://video.plataforma/sd-business-partner",
+                },
+                {
+                  nome: "03. Estrutura Organizacional e Cadastro de Materiais",
+                  link_video: "https://video.plataforma/sd-estrutura-materiais",
+                },
+              ],
+            },
           },
           {
-            nome: "Capacitação A2",
-            link_video: "https://example.com/video-a2",
+            nome: "Capacitação de Configurações",
+            workshops: {
+              create: [
+                {
+                  nome: "01. Fluxo SD",
+                  link_video: "https://video.plataforma/sd-fluxo",
+                },
+                {
+                  nome: "02. Precificação",
+                  link_video: "https://video.plataforma/sd-precificacao",
+                },
+                {
+                  nome: "03. Processos Gratuitos",
+                  link_video: "https://video.plataforma/sd-processos-gratuitos",
+                },
+              ],
+            },
           },
         ],
       },
     },
-  });
-
-  const workshopDivididoEmModulos = await prisma.workshop.create({
-    data: {
-      nome: "Workshop Dividido em Módulos",
-      moduloId: moduloWorkshop.id,
+    include: {
+      capacitacoes: {
+        include: {
+          workshops: true,
+        },
+      },
     },
   });
 
-  // Workshop 2: Com capacitação direta
-  // É necessário criar um módulo para a capacitação, pois o modelo Capacitacao exige um moduloId.
-  const moduloCapacitacaoDireta = await prisma.modulo.create({
+  // Criar Formação ABAP
+  const formacaoABAP = await prisma.formacao.create({
     data: {
-      nome: "Módulo para Capacitação Direta",
+      nome: "Formação ABAP",
+      capacitacoes: {
+        create: [
+          {
+            nome: "Capacitação ABAP",
+            workshops: {
+              create: [
+                {
+                  nome: "ABAP_01 - Overview",
+                  link_video: "https://video.plataforma/abap-overview",
+                },
+                {
+                  nome: "ABAP_02 - Request (versionamento, boas práticas de desenvolvimento)",
+                  link_video: "https://video.plataforma/abap-request",
+                },
+                {
+                  nome: "ABAP_03 - Tipos de dados",
+                  link_video: "https://video.plataforma/abap-tipos-dados",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    include: {
+      capacitacoes: {
+        include: {
+          workshops: true,
+        },
+      },
     },
   });
-
-  const capacitacaoDireta = await prisma.capacitacao.create({
-    data: {
-      nome: "Capacitação B1",
-      link_video: "https://example.com/video-b1",
-      moduloId: moduloCapacitacaoDireta.id,
-    },
-  });
-
-  const workshopCapacitacaoDireta = await prisma.workshop.create({
-    data: {
-      nome: "Workshop com Capacitação Direta",
-      capacitacaoId: capacitacaoDireta.id,
-    },
-  });
-
-  console.log("Seed data criada com sucesso!");
 }
 
 main()
