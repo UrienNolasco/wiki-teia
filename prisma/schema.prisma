@@ -17,7 +17,7 @@
     accounts      Account[]
     sessions      Session[]
 
-    tipo                                TipoUsuario
+    tipo                                TipoUsuario?
     Devolutiva_Devolutiva_alunoIdToUser Devolutiva[]
     ProgressoVideo                      ProgressoVideo[]
     Avaliacao                           Avaliacao[]
