@@ -29,6 +29,7 @@ import {
 import Header from "@/components/header";
 import { Card } from "@/components/ui/card";
 import FormacoesCards from "@/components/formacaocards";
+import Link from "next/link";
 
 const Home = () => {
   const { data } = useSession();
@@ -93,9 +94,11 @@ const Home = () => {
 
             {/* Área principal para botões */}
             <div className="flex-1 py-4 space-y-2">
-              <Button variant="ghost" className="w-full justify-start">
-                Página Inicial
-              </Button>
+              <Link href={`/`}>
+                <Button variant="ghost" className="w-full justify-start">
+                  Página Inicial
+                </Button>
+              </Link>
               <Button variant="ghost" className="w-full justify-start">
                 Configurações
               </Button>
