@@ -12,11 +12,40 @@ const handler = NextAuth({
       tenantId: process.env.AZURE_AD_TENANT_ID,
       authorization: {
         params: {
-          scope: "openid email profile User.Read",
+          scope: "openid email profile User.Read offline_access", // Adicione offline_access
         },
       },
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET, // Adicione explicitamente
+  session: {
+    strategy: "jwt", // Força uso de JWT para compatibilidade com middleware
+  },
+  callbacks: {
+    async jwt({ token, account }) {
+      // Persiste access_token no token JWT
+      if (account) {
+        token.accessToken = account.access_token;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Passa accessToken para a sessão
+      session.accessToken = token.accessToken;
+      return session;
+    },
+  },
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+  },
 });
 
 export { handler as GET, handler as POST };
