@@ -19,12 +19,12 @@ const About = () => {
             Sobre o nosso <br></br> aplicativo
           </h2>
           <p className="mt-4 text-lg text-gray-700 text-justify">
-            O <span className="font-bold">WIKITEIA</span> é uma plataforma web
-            que conecta aprendizado e prática, proporcionando um ambiente
-            dinâmico para estudos e desenvolvimento acadêmico. Nosso objetivo é
-            oferecer um espaço organizado e interativo onde os usuários podem
-            acessar videoaulas, criar apresentações originais e receber
-            feedbacks construtivos.
+              O <span className="font-bold">WIKITEIA</span> é uma plataforma web
+              que conecta aprendizado e prática, proporcionando um ambiente
+              dinâmico para estudos e desenvolvimento acadêmico. Nosso objetivo é
+              oferecer um espaço organizado e interativo onde os usuários podem
+              acessar videoaulas, criar apresentações originais e receber
+              feedbacks construtivos.
           </p>
         </div>
       </div>

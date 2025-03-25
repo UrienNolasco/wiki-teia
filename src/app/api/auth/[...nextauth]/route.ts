@@ -12,7 +12,7 @@ const handler = NextAuth({
       tenantId: process.env.AZURE_AD_TENANT_ID,
       authorization: {
         params: {
-          scope: "openid email profile User.Read offline_access", // Adicione offline_access
+          scope: "openid email profile User.Read offline_access", // Adicione offline_access ""
         },
       },
     }),
