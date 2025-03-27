@@ -25,7 +25,15 @@ export default function Teste() {
             <Separator orientation="vertical" className="mr-2 h-4" />
           </div>
         </header>
-        <div className=""></div>
+        <div className="flex flex-col items-center justify-center w-full h-full">
+          <iframe
+            src="https://teiaconnect.sharepoint.com/sites/Teia-Formaes-FormaoABAP/_layouts/15/embed.aspx?UniqueId=d9089d7c-5795-40cd-9b0c-7492e802c3b6&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create"
+            width="1280"
+            height="720"
+            allowFullScreen
+            title="Formação ABAP_01 - Overview ABAP-20240806_130640-Gravação de Reunião.mp4"
+          ></iframe>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

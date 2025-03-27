@@ -2,50 +2,7 @@ import NextAuth from "next-auth";
 import AzureADProvider from "next-auth/providers/azure-ad";
 import { db } from "@/lib/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import { authOptions } from "@/lib/auth";
 
-const handler = NextAuth({
-  adapter: PrismaAdapter(db),
-  providers: [
-    AzureADProvider({
-      clientId: process.env.AZURE_AD_CLIENT_ID!,
-      clientSecret: process.env.AZURE_AD_CLIENT_SECRET!,
-      tenantId: process.env.AZURE_AD_TENANT_ID,
-      authorization: {
-        params: {
-          scope: "openid email profile User.Read offline_access", // Adicione offline_access ""
-        },
-      },
-    }),
-  ],
-  secret: process.env.NEXTAUTH_SECRET, // Adicione explicitamente
-  session: {
-    strategy: "jwt", // Força uso de JWT para compatibilidade com middleware
-  },
-  callbacks: {
-    async jwt({ token, account }) {
-      // Persiste access_token no token JWT
-      if (account) {
-        token.accessToken = account.access_token;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      // Passa accessToken para a sessão
-      session.accessToken = token.accessToken;
-      return session;
-    },
-  },
-  cookies: {
-    sessionToken: {
-      name: `next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: process.env.NODE_ENV === "production",
-      },
-    },
-  },
-});
-
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
