@@ -1,13 +1,11 @@
 import CapacitacoesCards from "@/components/capacitacaocards";
-import HeaderWithSheet from "@/components/headerwithsheet";
 
-const Abap = () => {
+const SD = async () => {
   return (
     <div>
-      <HeaderWithSheet />
       <CapacitacoesCards />
     </div>
   );
 };
 
-export default Abap;
+export default SD;

@@ -9,21 +9,21 @@ const Biblioteca = () => {
       <div className="h-screen flex flex-col">
         <Header />
         <SearchBar />
-        <main className="bg-gray-200 ">
-          <div className="h-full">
+        <main className="bg-gray-200 flex-1">
+          <div className="p-8 space-y-8">
             <FormacaoCard
               nome="Formação ABAP"
-              path="/formacao/1"
+              path="/formacao/abap"
               imagem="/formacaoabap.svg"
             />
             <FormacaoCard
               nome="Formação SD"
-              path="/formacao/1"
+              path="/formacao/sd"
               imagem="/formacaosd.svg"
             />
             <FormacaoCard
               nome="Formação MM"
-              path="/formacao/1"
+              path="/formacao/mm"
               imagem="/formacaomm.svg"
             />
           </div>
