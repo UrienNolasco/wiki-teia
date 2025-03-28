@@ -86,6 +86,7 @@
 
   model Formacao {
   id           String         @id @default(uuid())
+  done          Boolean      @default(false)
   nome         String         @unique @db.VarChar(255)
   capacitacoes Capacitacao[]  // Uma formação tem muitas capacitações
 }
@@ -95,6 +96,7 @@ model Capacitacao {
   nome        String      @db.VarChar(255)
   link_video  String?
   formacaoId  String
+  done          Boolean      @default(false)
   formacao    Formacao    @relation(fields: [formacaoId], references: [id], onDelete: Cascade)
   workshops   Workshop[]  // Uma capacitação tem muitos workshops
 }
@@ -102,6 +104,7 @@ model Capacitacao {
 model Workshop {
   id            String       @id @default(uuid())
   nome          String       @db.VarChar(255)
+  done          Boolean      @default(false)
   capacitacaoId String
   link_video  String?
   capacitacao   Capacitacao  @relation(fields: [capacitacaoId], references: [id], onDelete: Cascade)

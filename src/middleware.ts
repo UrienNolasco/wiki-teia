@@ -12,6 +12,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Redireciona usuários autenticados que tentam acessar "/login"
   if (pathname.startsWith("/login")) {
     if (token) {
       return NextResponse.redirect(new URL("/", request.url));
@@ -19,6 +20,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Se não houver token, redireciona para a página de login
   if (!token) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
@@ -27,5 +29,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/dashboard/:path*"],
+  matcher: ["/", "/dashboard/:path*", "/formacao/:path*"], // Adiciona a proteção para "/formacao"
 };
