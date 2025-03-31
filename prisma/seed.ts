@@ -71,15 +71,19 @@ async function main() {
               create: [
                 {
                   nome: "ABAP_01 - Overview",
-                  link_video: "https://video.plataforma/abap-overview",
+                  link_video:
+                    "https://teiaconnect.sharepoint.com/sites/Teia-Formaes-FormaoABAP/_layouts/15/embed.aspx?UniqueId=d9089d7c-5795-40cd-9b0c-7492e802c3b6&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
                 },
                 {
                   nome: "ABAP_02 - Request (versionamento, boas práticas de desenvolvimento)",
-                  link_video: "https://video.plataforma/abap-request",
+                  link_video:
+                    "https://teiaconnect.sharepoint.com/sites/Teia-Formaes-FormaoABAP/_layouts/15/embed.aspx?UniqueId=059bd40d-c38f-4ce6-a037-186817f0d8a4&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
                 },
+
                 {
                   nome: "ABAP_03 - Tipos de dados",
-                  link_video: "https://video.plataforma/abap-tipos-dados",
+                  link_video:
+                    "https://teiaconnect.sharepoint.com/sites/Teia-Formaes-FormaoABAP/_layouts/15/embed.aspx?UniqueId=1f519352-3abe-4c4c-b34d-83b5d0677e85&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
                 },
               ],
             },

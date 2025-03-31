@@ -1,4 +1,4 @@
-import ConteudoFormacao from "@/components/formacaocontent";
+import FormacaoServer from "@/components/formacaoserver";
 import { Header } from "@/components/header";
 import { SearchBar } from "@/components/searchbar";
 import { SidebarLayout } from "@/components/sidebarlayout";
@@ -11,7 +11,7 @@ const SD = async () => {
         <SearchBar />
         <main className="bg-gray-200 flex-1">
           <div className="p-8 space-y-8">
-            <ConteudoFormacao tipoFormacao="Formação SD" />
+            <FormacaoServer tipoFormacao="Formação SD" />
           </div>
         </main>
       </div>

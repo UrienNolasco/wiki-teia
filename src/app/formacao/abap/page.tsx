@@ -1,9 +1,7 @@
+import FormacaoServer from "@/components/formacaoserver";
 import { Header } from "@/components/header";
 import { SearchBar } from "@/components/searchbar";
 import { SidebarLayout } from "@/components/sidebarlayout";
-
-import ConteudoFormacao from "@/components/formacaocontent";
-
 
 const Abap = () => {
   return (
@@ -12,8 +10,8 @@ const Abap = () => {
         <Header />
         <SearchBar />
         <main className="bg-gray-200 flex-1">
-          <div className="p-8 space-y-8">
-            <ConteudoFormacao tipoFormacao="Formação ABAP" />
+          <div className="p-8 space-y-8 ">
+            <FormacaoServer tipoFormacao="Formação ABAP" />
           </div>
         </main>
       </div>
