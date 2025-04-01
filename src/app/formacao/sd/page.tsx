@@ -3,6 +3,8 @@ import { Header } from "@/components/header";
 import { SearchBar } from "@/components/searchbar";
 import { SidebarLayout } from "@/components/sidebarlayout";
 
+export const revalidate = 0;
+
 const SD = async () => {
   return (
     <SidebarLayout>

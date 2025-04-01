@@ -73,15 +73,15 @@ export default function FormacaoContent({ formacao }: FormacaoContentProps) {
             key={capacitacao.id}
             className="w-full p-4 flex flex-row justify-between items-center hover:shadow-lg transition-shadow duration-200"
           >
-            <div className="flex items-center gap-6">
-              <div className="text-lg font-semibold text-gray-800">
+            <div className="flex items-center gap-6 min-w-[200px] max-w-[450px] flex-grow">
+              <div className="text-lg font-semibold text-gray-800 flex-grow  truncate">
                 {capacitacao.nome}
               </div>
 
               <div className="h-6 w-px bg-gray-200" />
 
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-500">Progresso:</span>
+                <span className="text-sm text-gray-500 ">Progresso:</span>
                 <div
                   className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm ${
                     capacitacao.completedWorkshops ===

@@ -5,6 +5,8 @@ import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 
+export const revalidate = 0;
+
 const Workshops = async () => {
   const session = await getServerSession(authOptions);
   const userId = session?.user.id;
