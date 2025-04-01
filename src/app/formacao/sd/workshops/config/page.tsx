@@ -1,19 +1,36 @@
 import { Header } from "@/components/header";
 import { SidebarLayout } from "@/components/sidebarlayout";
 import { VideoCard } from "@/components/videocard";
+import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
 
 const Workshops = async () => {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user.id;
+
   const workshops = await db.workshop.findMany({
     where: {
       capacitacao: {
         nome: "Capacitação de Configurações",
       },
     },
+    include: {
+      progressoWorkshop: {
+        where: {
+          usuarioId: userId,
+        },
+      },
+    },
     orderBy: {
       nome: "asc",
     },
   });
+
+  const workshopsComProgresso = workshops.map((workshop) => ({
+    ...workshop,
+    done: workshop.progressoWorkshop.some((pw) => pw.done),
+  }));
 
   return (
     <SidebarLayout>
@@ -25,12 +42,13 @@ const Workshops = async () => {
               Capacitação SD - Configurações
             </h1>
             <div className="space-y-6">
-              {workshops.map((workshop) => (
+              {workshopsComProgresso.map((workshop) => (
                 <VideoCard
                   key={workshop.id}
                   workshop={{
                     ...workshop,
                     link_video: workshop.link_video ?? "",
+                    done: workshop.done, // Agora está correto
                   }}
                 />
               ))}

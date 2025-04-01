@@ -29,7 +29,6 @@ const Workshops = async () => {
     },
   });
 
-  // Mapeie os workshops para incluir o 'done'
   const workshopsComProgresso = workshops.map((workshop) => ({
     ...workshop,
     done: workshop.progressoWorkshop.some((pw) => pw.done),
