@@ -20,14 +20,28 @@ export default function FormacaoContent({ formacao }: FormacaoContentProps) {
 
   const router = useRouter();
 
-  const handleClick = () => {
-    if (formacao?.nome === "Formação ABAP") {
+  const handleClick = (capacitacao: {
+    id: string;
+    nome: string;
+    done: boolean;
+  }) => {
+    if (formacao.nome === "Formação ABAP") {
       router.push("/formacao/abap/workshops");
-    }
-    if (formacao?.nome === "Formação SD") {
-      router.push("/formacao/sd/workshops");
-    }
-    if (formacao?.nome === "Formação MM") {
+    } else if (formacao.nome === "Formação SD") {
+      // Determinar o slug baseado no nome da capacitação
+      let slug;
+      switch (capacitacao.nome) {
+        case "Capacitação de Negócios":
+          slug = "negocios";
+          break;
+        case "Capacitação de Configurações":
+          slug = "config";
+          break;
+        default:
+          slug = "";
+      }
+      router.push(`/formacao/sd/workshops/${slug}`);
+    } else if (formacao.nome === "Formação MM") {
       router.push("/formacao/mm/workshops");
     }
   };
@@ -81,7 +95,7 @@ export default function FormacaoContent({ formacao }: FormacaoContentProps) {
 
             <Button
               className="bg-[#5e17eb] hover:bg-[#4a12ba] "
-              onClick={() => handleClick()}
+              onClick={() => handleClick(capacitacao)}
             >
               Acessar Capacitação
             </Button>

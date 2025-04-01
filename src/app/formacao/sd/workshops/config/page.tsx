@@ -1,7 +1,5 @@
 import { Header } from "@/components/header";
-
 import { SidebarLayout } from "@/components/sidebarlayout";
-
 import { VideoCard } from "@/components/videocard";
 import { db } from "@/lib/prisma";
 
@@ -9,14 +7,13 @@ const Workshops = async () => {
   const workshops = await db.workshop.findMany({
     where: {
       capacitacao: {
-        nome: "Capacitação ABAP",
+        nome: "Capacitação de Configurações",
       },
     },
     orderBy: {
       nome: "asc",
     },
   });
-
 
   return (
     <SidebarLayout>
@@ -25,7 +22,7 @@ const Workshops = async () => {
         <main className="bg-gray-200 flex-1 p-8">
           <div className="max-w-7xl mx-auto space-y-8">
             <h1 className="text-3xl font-bold text-gray-900">
-              Capacitação ABAP
+              Capacitação SD - Configurações
             </h1>
             <div className="space-y-6">
               {workshops.map((workshop) => (
