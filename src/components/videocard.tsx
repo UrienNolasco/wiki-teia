@@ -10,28 +10,41 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import {
-  ChevronDown,
-  ChevronUp,
-  FileText,
-  MessageCircle,
-  Star,
-  ThumbsUp,
-} from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { ChevronDown, ChevronUp, FileText, MessageCircle } from "lucide-react";
 import Link from "next/link";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
-import { DialogTrigger } from "@radix-ui/react-dialog";
+
 import FooterAvaliation from "./footeravaliation";
+import { switchVideo } from "@/app/actions/switchVideo";
 
 interface Workshop {
+  id: string;
   nome: string;
   link_video: string;
+  done: boolean;
 }
 
 export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isDone, setIsDone] = useState(workshop.done);
 
   const cleanVideoUrl = workshop.link_video.replace(/^"(.*)"$/, "$1");
+
+  const handleSwitchChange = async () => {
+    const newDoneStatus = !isDone;
+    setIsDone(newDoneStatus);
+
+    try {
+      await switchVideo({
+        id: workshop.id,
+        done: newDoneStatus,
+      });
+      console.log("Sucesso ao salvar");
+    } catch (error) {
+      console.error("Erro ao atualizar status do vídeo", error);
+      setIsDone(!newDoneStatus); // Reverter em caso de erro
+    }
+  };
 
   return (
     <Card className="w-full mb-6 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
@@ -72,7 +85,7 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
           </div>
         </CardContent>
 
-        <CardFooter className="flex justify-between gap-4 border-t mt-8">
+        <CardFooter className="flex justify-between gap-4 border-t mt-8 items-center">
           <FooterAvaliation />
 
           <Button
@@ -98,6 +111,11 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
               Devolutiva
             </Link>
           </Button>
+
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-700">Visto</span>
+            <Switch checked={isDone} onCheckedChange={handleSwitchChange} />
+          </div>
         </CardFooter>
       </motion.div>
     </Card>

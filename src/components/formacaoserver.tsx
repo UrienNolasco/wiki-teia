@@ -12,7 +12,7 @@ export default async function FormacaoServer({
   let formacoes;
   try {
     formacoes = await getFormacoes();
-    console.log("Formações:", formacoes);
+
   } catch (error) {
     console.error("Erro ao buscar formações:", error);
     return <p>Erro ao carregar as formações.</p>;
