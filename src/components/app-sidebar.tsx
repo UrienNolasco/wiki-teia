@@ -27,7 +27,6 @@ import {
 import Team from "./team";
 import NavUser from "./nav-user";
 
-// This is sample data.
 const data = {
   navMain: [
     {
@@ -37,11 +36,11 @@ const data = {
       items: [
         {
           title: "ABAP",
-          url: "abap",
+          url: "formacao/abap",
         },
         {
           title: "SD",
-          url: "sd",
+          url: "formacao/sd",
         },
         {
           title: "MM",
@@ -50,25 +49,25 @@ const data = {
       ],
     },
     {
-      title: "Documentation",
+      title: "Biblioteca de Conteúdo",
       url: "#",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
-          url: "#",
+          title: "Capacitação ABAP",
+          url: "/abap/workshops",
         },
         {
-          title: "Get Started",
-          url: "#",
+          title: "Capacitação de Negócios",
+          url: "/formacao/sd/workshops/negocios",
         },
         {
-          title: "Tutorials",
-          url: "#",
+          title: "Capacitação de Configurações",
+          url: "/formacao/sd/workshops/config",
         },
         {
-          title: "Changelog",
-          url: "#",
+          title: "Capacitação MM",
+          url: "/mm/workshops",
         },
       ],
     },
