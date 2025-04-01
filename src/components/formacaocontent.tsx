@@ -9,7 +9,12 @@ import { useRouter } from "next/navigation";
 type FormacaoContentProps = {
   formacao?: {
     nome: string;
-    capacitacoes: { id: string; nome: string; done: boolean }[];
+    capacitacoes: {
+      id: string;
+      nome: string;
+      totalWorkshops: number;
+      completedWorkshops: number;
+    }[];
   };
 };
 
@@ -23,7 +28,8 @@ export default function FormacaoContent({ formacao }: FormacaoContentProps) {
   const handleClick = (capacitacao: {
     id: string;
     nome: string;
-    done: boolean;
+    totalWorkshops: number;
+    completedWorkshops: number;
   }) => {
     if (formacao.nome === "Formação ABAP") {
       router.push("/formacao/abap/workshops");
@@ -78,17 +84,22 @@ export default function FormacaoContent({ formacao }: FormacaoContentProps) {
                 <span className="text-sm text-gray-500">Progresso:</span>
                 <div
                   className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm ${
-                    capacitacao.done
+                    capacitacao.completedWorkshops ===
+                    capacitacao.totalWorkshops
                       ? "bg-green-100 text-green-800"
                       : "bg-orange-100 text-orange-800"
                   }`}
                 >
-                  {capacitacao.done ? (
+                  {capacitacao.completedWorkshops ===
+                  capacitacao.totalWorkshops ? (
                     <CheckCircle className="h-4 w-4" />
                   ) : (
                     <AlertCircle className="h-4 w-4" />
                   )}
-                  <span>{capacitacao.done ? "Concluído" : "Pendente"}</span>
+                  <span>
+                    {capacitacao.completedWorkshops}/
+                    {capacitacao.totalWorkshops}
+                  </span>
                 </div>
               </div>
             </div>

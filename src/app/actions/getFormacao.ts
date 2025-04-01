@@ -9,9 +9,7 @@ export const getFormacoes = async (userId: string) => {
           include: {
             workshops: {
               include: {
-                // Corrigido para progressoWorkshop (singular)
                 progressoWorkshop: {
-                  // ← Nome correto da relação
                   where: {
                     usuarioId: userId,
                   },
@@ -25,16 +23,18 @@ export const getFormacoes = async (userId: string) => {
 
     return formacoes.map((formacao) => ({
       ...formacao,
-      capacitacoes: formacao.capacitacoes.map((capacitacao) => ({
-        ...capacitacao,
-        workshops: capacitacao.workshops.map((workshop) => ({
-          ...workshop,
-          done:
-            workshop.progressoWorkshop.length > 0
-              ? workshop.progressoWorkshop[0].done
-              : false,
-        })),
-      })),
+      capacitacoes: formacao.capacitacoes.map((capacitacao) => {
+        const totalWorkshops = capacitacao.workshops.length;
+        const completedWorkshops = capacitacao.workshops.filter((workshop) =>
+          workshop.progressoWorkshop.some((pw) => pw.done)
+        ).length;
+
+        return {
+          ...capacitacao,
+          totalWorkshops,
+          completedWorkshops,
+        };
+      }),
     }));
   } catch (error) {
     console.error("Erro ao buscar formações:", error);
