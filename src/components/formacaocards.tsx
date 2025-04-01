@@ -11,11 +11,19 @@ import {
   CardFooter,
 } from "./ui/card";
 import { Button } from "./ui/button";
+import { useSession } from "next-auth/react";
 
 export default function FormacoesCards() {
   const router = useRouter();
   const [formacoes, setFormacoes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const user = useSession();
+  const userId = user.data?.user.id;
+
+  if (!userId) {
+    return <p>Usuário não autenticado.</p>;
+  }
 
   const handleAcessarFormacao = (nomeFormacao: string) => {
     const tipo = nomeFormacao.split(" ").pop()?.toLowerCase() || "";
@@ -25,7 +33,7 @@ export default function FormacoesCards() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getFormacoes();
+        const data = await getFormacoes(userId);
         if (data) setFormacoes(data);
       } catch (error) {
         console.error(error);
@@ -62,4 +70,4 @@ export default function FormacoesCards() {
     </div>
   );
 }
-""
+("");

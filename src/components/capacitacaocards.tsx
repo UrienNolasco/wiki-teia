@@ -11,6 +11,7 @@ import {
   CardFooter,
 } from "./ui/card";
 import { Button } from "./ui/button";
+import { useSession } from "next-auth/react";
 
 export default function CapacitacoesCards() {
   const router = useRouter();
@@ -18,11 +19,17 @@ export default function CapacitacoesCards() {
   const [capacitacoes, setCapacitacoes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const user = useSession();
+  const userId = user.data?.user.id;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const urlSegment = pathname.split("/")[1];
-        const formacoes = await getFormacoes();
+        if (!userId) {
+          throw new Error("User ID is undefined");
+        }
+        const formacoes = await getFormacoes(userId);
 
         const formacaoAtual = formacoes?.find((formacao: any) => {
           // Nova lógica de normalização

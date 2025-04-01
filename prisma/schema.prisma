@@ -1,114 +1,91 @@
-  generator client {
-    provider = "prisma-client-js"
-  }
+generator client {
+  provider = "prisma-client-js"
+}
 
-  datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
-  }
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
 
+model User {
+  id                                  String              @id @default(cuid())
+  name                                String?
+  email                               String              @unique
+  emailVerified                       DateTime?
+  image                               String?
+  tipo                                TipoUsuario?
+  createdAt                           DateTime            @default(now())
+  updatedAt                           DateTime            @updatedAt
+  accounts                            Account[]
+  Avaliacao                           Avaliacao[]
+  Devolutiva_Devolutiva_alunoIdToUser Devolutiva[]
+  ProgressoVideo                      ProgressoVideo[]
+  ProgressoWorkshop                   ProgressoWorkshop[]
+  sessions                            Session[]
+}
 
-  model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String    @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  ext_expires_in    Int?
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    tipo                                TipoUsuario?
-    Devolutiva_Devolutiva_alunoIdToUser Devolutiva[]
-    ProgressoVideo                      ProgressoVideo[]
-    Avaliacao                           Avaliacao[]
+  @@id([provider, providerAccountId])
+}
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-  }
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 
-  model Account {
-    userId            String
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String?
-    access_token      String?
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String?
-    session_state     String?
-    ext_expires_in    Int?
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  @@id([identifier, token])
+}
 
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    @@id([provider, providerAccountId])
-  }
-
-  model Session {
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-  }
-
-  model VerificationToken {
-    identifier String
-    token      String
-    expires    DateTime
-
-    @@id([identifier, token])
-  }
-
-  enum TipoUsuario {
-    Aluno
-    Avaliador
-    Administrador
-  }
-
-  enum TipoDevolutiva {
-    PDF
-    PPTX
-    VIDEO
-  }
-
-  enum StatusDevolutiva {
-    Enviado
-    Aprovado
-    Rejeitado
-  }
-
-  model Formacao {
-  id           String         @id @default(uuid())
-  done          Boolean      @default(false)
-  nome         String         @unique @db.VarChar(255)
-  capacitacoes Capacitacao[]  // Uma formação tem muitas capacitações
+model Formacao {
+  id           String        @id @default(uuid())
+  nome         String        @unique @db.VarChar(255)
+  done         Boolean       @default(false)
+  capacitacoes Capacitacao[]
 }
 
 model Capacitacao {
-  id          String      @id @default(uuid())
-  nome        String      @db.VarChar(255)
-  link_video  String?
-  formacaoId  String
-  done          Boolean      @default(false)
-  formacao    Formacao    @relation(fields: [formacaoId], references: [id], onDelete: Cascade)
-  workshops   Workshop[]  // Uma capacitação tem muitos workshops
+  id         String     @id @default(uuid())
+  nome       String     @db.VarChar(255)
+  link_video String?
+  formacaoId String
+  done       Boolean    @default(false)
+  formacao   Formacao   @relation(fields: [formacaoId], references: [id], onDelete: Cascade)
+  workshops  Workshop[]
 }
 
 model Workshop {
-  id            String       @id @default(uuid())
-  nome          String       @db.VarChar(255)
-  done          Boolean      @default(false)
-  capacitacaoId String
-  link_video  String?
-  capacitacao   Capacitacao  @relation(fields: [capacitacaoId], references: [id], onDelete: Cascade)
-  devolutivas   Devolutiva[] // Um workshop tem muitas devolutivas
+  id                String              @id @default(uuid())
+  nome              String              @db.VarChar(255)
+  capacitacaoId     String
+  link_video        String?
+  devolutivas       Devolutiva[]
+  progressoWorkshop ProgressoWorkshop[]
+  capacitacao       Capacitacao         @relation(fields: [capacitacaoId], references: [id], onDelete: Cascade)
 }
 
 model Devolutiva {
@@ -119,13 +96,12 @@ model Devolutiva {
   arquivo_url   String
   status        StatusDevolutiva @default(Enviado)
   duracao_video Int?
-  workshop      Workshop         @relation(fields: [workshopId], references: [id], onDelete: Cascade)
-  aluno         User             @relation(fields: [alunoId], references: [id], onDelete: Cascade)
-  progresso     ProgressoVideo[]
   avaliacao     Avaliacao[]
+  aluno         User             @relation(fields: [alunoId], references: [id], onDelete: Cascade)
+  workshop      Workshop         @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  progresso     ProgressoVideo[]
 }
 
-// Outros modelos mantidos com nomes no singular:
 model ProgressoVideo {
   id                 String     @id @default(uuid())
   devolutivaId       String
@@ -142,6 +118,35 @@ model Avaliacao {
   avaliadorId  String
   nota         Decimal    @db.Decimal(3, 1)
   comentario   String?
-  devolutiva   Devolutiva @relation(fields: [devolutivaId], references: [id], onDelete: Cascade)
   avaliador    User       @relation(fields: [avaliadorId], references: [id], onDelete: Cascade)
+  devolutiva   Devolutiva @relation(fields: [devolutivaId], references: [id], onDelete: Cascade)
+}
+
+model ProgressoWorkshop {
+  id         String   @id @default(uuid())
+  usuarioId  String
+  workshopId String
+  done       Boolean  @default(false)
+  usuario    User     @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  workshop   Workshop @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, workshopId])
+}
+
+enum TipoUsuario {
+  Aluno
+  Avaliador
+  Administrador
+}
+
+enum TipoDevolutiva {
+  PDF
+  PPTX
+  VIDEO
+}
+
+enum StatusDevolutiva {
+  Enviado
+  Aprovado
+  Rejeitado
 }

@@ -3,15 +3,23 @@
 import { db } from "@/lib/prisma";
 
 interface SwitchVideoParams {
-  id: string;
+  usuarioId: string;
+  workshopId: string;
   done: boolean;
 }
 
-export const switchVideo = async ({ id, done }: SwitchVideoParams) => {
+export const switchVideo = async ({
+  usuarioId,
+  workshopId,
+  done,
+}: SwitchVideoParams) => {
   try {
-    await db.workshop.update({
-      where: { id }, // Especifica qual registro atualizar
-      data: { done }, // Define os novos valores
+    await db.progressoWorkshop.upsert({
+      where: {
+        usuarioId_workshopId: { usuarioId, workshopId },
+      },
+      update: { done },
+      create: { usuarioId, workshopId, done },
     });
   } catch (error) {
     console.error("Erro ao atualizar vídeo:", error);

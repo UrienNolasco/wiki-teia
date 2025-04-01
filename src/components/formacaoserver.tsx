@@ -1,6 +1,8 @@
-// app/components/FormacaoServer.tsx
+import { getServerSession } from "next-auth/next";
+
 import { getFormacoes } from "@/app/actions/getFormacao";
 import FormacaoContent from "./formacaocontent";
+import { authOptions } from "@/lib/auth";
 
 type FormacaoServerProps = {
   tipoFormacao: "Formação ABAP" | "Formação SD" | "Formação MM";
@@ -9,10 +11,18 @@ type FormacaoServerProps = {
 export default async function FormacaoServer({
   tipoFormacao,
 }: FormacaoServerProps) {
+  // Obter a sessão do servidor
+  const session = await getServerSession(authOptions); // Usando authOptions do NextAuth
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    console.log(userId);
+    return <p>Usuário não autenticado.</p>;
+  }
+
   let formacoes;
   try {
-    formacoes = await getFormacoes();
-
+    formacoes = await getFormacoes(userId); // Passando o userId como argumento
   } catch (error) {
     console.error("Erro ao buscar formações:", error);
     return <p>Erro ao carregar as formações.</p>;

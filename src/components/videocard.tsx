@@ -16,6 +16,7 @@ import Link from "next/link";
 
 import FooterAvaliation from "./footeravaliation";
 import { switchVideo } from "@/app/actions/switchVideo";
+import { useSession } from "next-auth/react";
 
 interface Workshop {
   id: string;
@@ -25,6 +26,8 @@ interface Workshop {
 }
 
 export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
+  const user = useSession();
+
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [isDone, setIsDone] = useState(workshop.done);
 
@@ -36,10 +39,10 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
 
     try {
       await switchVideo({
-        id: workshop.id,
+        usuarioId: user.data?.user.id ?? "",
+        workshopId: workshop.id,
         done: newDoneStatus,
       });
-      console.log("Sucesso ao salvar");
     } catch (error) {
       console.error("Erro ao atualizar status do vídeo", error);
       setIsDone(!newDoneStatus); // Reverter em caso de erro
