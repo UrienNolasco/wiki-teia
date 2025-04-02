@@ -36,6 +36,17 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
   const user = useSession();
 
   const [isCollapsed, setIsCollapsed] = useState(true);
+
+  useEffect(() => {
+    if (!isCollapsed) {
+      setLastWorkshop(workshop.id);
+    }
+  }, [isCollapsed, workshop.id, setLastWorkshop]);
+
+  const handleToggleCollapse = () => {
+    setIsCollapsed((prev) => !prev);
+  };
+
   const [isDone, setIsDone] = useState(workshop.done);
 
   const cleanVideoUrl = workshop.link_video.replace(/^"(.*)"$/, "$1");
@@ -60,7 +71,7 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
     <Card className="w-full mb-6 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
       <CardHeader
         className="cursor-pointer pb-4"
-        onClick={() => setIsCollapsed(!isCollapsed)}
+        onClick={handleToggleCollapse}
       >
         <CardTitle className="flex items-center justify-between gap-2 text-xl text-gray-800">
           <div className="flex items-center gap-2">
