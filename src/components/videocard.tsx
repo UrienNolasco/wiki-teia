@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +17,7 @@ import Link from "next/link";
 import FooterAvaliation from "./footeravaliation";
 import { switchVideo } from "@/app/actions/switchVideo";
 import { useSession } from "next-auth/react";
+import { useLastWorkshopStore } from "@/stores/progressStore";
 
 interface Workshop {
   id: string;
@@ -26,6 +27,12 @@ interface Workshop {
 }
 
 export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
+  const { setLastWorkshop } = useLastWorkshopStore();
+
+  useEffect(() => {
+    setLastWorkshop(workshop.id);
+  }, [workshop.id, setLastWorkshop]);
+
   const user = useSession();
 
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -84,7 +91,7 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
               className="w-full h-full"
               title={workshop.nome}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
           </div>
         </CardContent>
 
