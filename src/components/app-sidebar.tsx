@@ -36,15 +36,15 @@ const data = {
       items: [
         {
           title: "ABAP",
-          url: "formacao/abap",
+          url: "/formacao/abap",
         },
         {
           title: "SD",
-          url: "formacao/sd",
+          url: "/formacao/sd",
         },
         {
           title: "MM",
-          url: "mm",
+          url: "/formacao/mm",
         },
       ],
     },
@@ -55,7 +55,7 @@ const data = {
       items: [
         {
           title: "Capacitação ABAP",
-          url: "/abap/workshops",
+          url: "/formacao/abap/workshops",
         },
         {
           title: "Capacitação de Negócios",

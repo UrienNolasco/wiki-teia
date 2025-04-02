@@ -17,6 +17,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { useRouter } from "next/navigation";
 
 export function NavMain({
   items,
@@ -32,6 +33,7 @@ export function NavMain({
     }[];
   }[];
 }) {
+  const router = useRouter();
   return (
     <SidebarGroup>
       <SidebarGroupLabel>
@@ -49,7 +51,7 @@ export function NavMain({
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
+                <SidebarMenuButton tooltip={item.title} className="truncate">
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
@@ -59,10 +61,13 @@ export function NavMain({
                 <SidebarMenuSub>
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
-                          <span>{subItem.title}</span>
-                        </a>
+                      <SidebarMenuSubButton
+                        asChild
+                        onClick={() => router.push(subItem.url)}
+                      >
+                        <span className="truncate whitespace-nowrap">
+                          {subItem.title}
+                        </span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   ))}
