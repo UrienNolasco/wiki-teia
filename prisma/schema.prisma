@@ -22,6 +22,8 @@ model User {
   ProgressoVideo                      ProgressoVideo[]
   ProgressoWorkshop                   ProgressoWorkshop[]
   sessions                            Session[]
+
+  AvaliacaoWorkshop AvaliacaoWorkshop[]
 }
 
 model Account {
@@ -86,6 +88,8 @@ model Workshop {
   devolutivas       Devolutiva[]
   progressoWorkshop ProgressoWorkshop[]
   capacitacao       Capacitacao         @relation(fields: [capacitacaoId], references: [id], onDelete: Cascade)
+
+  AvaliacaoWorkshop AvaliacaoWorkshop[]
 }
 
 model Devolutiva {
@@ -132,6 +136,20 @@ model ProgressoWorkshop {
 
   @@unique([usuarioId, workshopId])
 }
+
+model AvaliacaoWorkshop {
+  id         String   @id @default(uuid())
+  usuarioId  String
+  workshopId String
+  rating     Int      @default(0) // Armazena valores de 0 a 5
+  feedback   String?  // Campo opcional de texto
+  usuario    User     @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  workshop   Workshop @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+
+  // Garante que cada usuário só tenha uma avaliação por workshop
+  @@unique([usuarioId, workshopId])
+}
+
 
 enum TipoUsuario {
   Aluno

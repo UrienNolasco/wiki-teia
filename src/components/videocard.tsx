@@ -89,7 +89,7 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
         </CardContent>
 
         <CardFooter className="flex justify-between gap-4 border-t mt-8 items-center">
-          <FooterAvaliation />
+          <FooterAvaliation workshopId={workshop.id} />
 
           <Button
             variant="outline"

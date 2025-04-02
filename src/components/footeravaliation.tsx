@@ -8,16 +8,36 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { useState } from "react";
+import { Textarea } from "./ui/textarea";
+import { addRating } from "@/app/actions/addrating";
+import { useSession } from "next-auth/react";
 
-const FooterAvaliation = () => {
+interface FooterAvaliationProps {
+  workshopId: string; // Adicione esta prop
+}
+
+const FooterAvaliation = ({ workshopId }: FooterAvaliationProps) => {
+  const user = useSession();
   const [open, setOpen] = useState(false);
-
+  const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState<number>(0);
   const [isEvaluated, setIsEvaluated] = useState(false);
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setIsEvaluated(true);
     setOpen(false);
+
+    try {
+      await addRating({
+        usuarioId: user.data?.user.id ?? "",
+        workshopId,
+        rating,
+        feedback,
+      });
+    } catch (error) {
+      console.error("Erro ao adicionar avaliação", error);
+      setIsEvaluated(false); // Reverter em caso de erro
+    }
   };
 
   return (
@@ -54,7 +74,11 @@ const FooterAvaliation = () => {
               />
             ))}
           </div>
-
+          <Textarea
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+            placeholder="Deixe seu feedback..."
+          />
           <Button
             className="w-full bg-green-600 hover:bg-green-700 transition-colors duration-300 rounded-lg py-2 text-white font-medium"
             onClick={(e) => {
