@@ -3,6 +3,7 @@ import { Header } from "@/components/header";
 import { LibraryCard } from "@/components/librarycard";
 import { SearchBar } from "@/components/searchbar";
 import { SidebarLayout } from "@/components/sidebarlayout";
+import { ToastContainer } from "react-toastify";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
       <div className="h-screen flex flex-col">
         <Header />
         <SearchBar />
+        <ToastContainer />
         <main className="flex-1 bg-gray-200 p-6 overflow-y-auto [&::-webkit-scrollbar]:hidden">
           <div className="max-w-2xl mx-auto space-y-6">
             <ContinueWatching />

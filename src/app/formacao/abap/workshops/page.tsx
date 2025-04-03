@@ -4,6 +4,7 @@ import { VideoCard } from "@/components/videocard";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
+import { ToastContainer } from "react-toastify";
 
 export const revalidate = 0;
 
@@ -36,6 +37,7 @@ const Workshops = async () => {
 
   return (
     <SidebarLayout>
+      <ToastContainer />
       <div className="h-screen flex flex-col ">
         <Header />
         <main className="bg-gray-200 flex-1 p-8">

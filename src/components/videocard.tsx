@@ -25,6 +25,7 @@ import { switchVideo } from "@/app/actions/switchVideo";
 import { useSession } from "next-auth/react";
 import { useLastWorkshopStore } from "@/stores/progressStore";
 import { getAverageRating } from "@/app/actions/getrating";
+import { toast } from "react-toastify";
 
 interface Workshop {
   id: string;
@@ -102,6 +103,23 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
     }
   };
 
+  const handleRatingInteraction = (e: React.MouseEvent) => {
+    if (!isDone) {
+      e.preventDefault();
+      e.stopPropagation();
+      toast.error("Por favor, marque o vídeo como assistido antes de avaliar.");
+    }
+  };
+
+  const handleFeedbackClick = (e: React.MouseEvent) => {
+    if (!isDone) {
+      e.preventDefault();
+      toast.error(
+        "Por favor, marque o vídeo como assistido antes de acessar a devolutiva."
+      );
+    }
+  };
+
   return (
     <Card className="w-full mb-6 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
       <CardHeader
@@ -155,7 +173,7 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
         </CardContent>
 
         <CardFooter className="flex justify-between gap-4 border-t mt-8 items-center">
-          <FooterAvaliation workshopId={workshop.id} />
+          <FooterAvaliation workshopId={workshop.id} isDone={!isDone} />
 
           <Button
             variant="outline"

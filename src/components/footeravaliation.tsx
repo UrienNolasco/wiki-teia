@@ -11,12 +11,14 @@ import { useState } from "react";
 import { Textarea } from "./ui/textarea";
 import { addRating } from "@/app/actions/addrating";
 import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 
 interface FooterAvaliationProps {
   workshopId: string; // Adicione esta prop
+  isDone?: boolean;
 }
 
-const FooterAvaliation = ({ workshopId }: FooterAvaliationProps) => {
+const FooterAvaliation = ({ workshopId, isDone }: FooterAvaliationProps) => {
   const user = useSession();
   const [open, setOpen] = useState(false);
   const [feedback, setFeedback] = useState("");
@@ -40,13 +42,22 @@ const FooterAvaliation = ({ workshopId }: FooterAvaliationProps) => {
     }
   };
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (isDone) {
+      e.preventDefault();
+      toast.warning(
+        "Por favor, marque o vídeo como assistido antes de avaliar."
+      );
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           variant="outline"
           className="flex-1 gap-2 border-gray-400 hover:border-gray-600"
-          onClick={(e) => e.stopPropagation()}
+          onClick={handleClick}
         >
           <ThumbsUp className="h-4 w-4" />
           {isEvaluated ? "Workshop Avaliado" : "Avaliar Workshop"}
