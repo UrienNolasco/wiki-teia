@@ -19,7 +19,7 @@ export function LibraryCard({ title, path }: LibraryCardProps) {
           {title}
         </CardTitle>
         <Button
-          className="uppercase bg-pink-500 hover:bg-pink-600 transition-colors font-semibold"
+          className="uppercase ransition-all duration-300 hover:scale-[1.02] shadow-sm hover:shadow-md bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white"
           onClick={() => router.push(path)}
         >
           Acessar

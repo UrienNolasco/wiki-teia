@@ -11,13 +11,20 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { ChevronDown, ChevronUp, FileText, MessageCircle } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  FileText,
+  MessageCircle,
+  Star,
+} from "lucide-react";
 import Link from "next/link";
 
 import FooterAvaliation from "./footeravaliation";
 import { switchVideo } from "@/app/actions/switchVideo";
 import { useSession } from "next-auth/react";
 import { useLastWorkshopStore } from "@/stores/progressStore";
+import { getAverageRating } from "@/app/actions/getrating";
 
 interface Workshop {
   id: string;
@@ -28,10 +35,38 @@ interface Workshop {
 
 export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
   const { setLastWorkshop } = useLastWorkshopStore();
+  const [averageRating, setAverageRating] = useState(0);
+  const [ratingCount, setRatingCount] = useState(0);
 
   useEffect(() => {
     setLastWorkshop(workshop.id);
   }, [workshop.id, setLastWorkshop]);
+
+  useEffect(() => {
+    const fetchRating = async () => {
+      const { average, count } = await getAverageRating({
+        workshopId: workshop.id,
+      });
+      setAverageRating(Math.round(average));
+      setRatingCount(count);
+    };
+
+    fetchRating();
+  }, [workshop.id]);
+
+  const renderStars = () => {
+    return [1, 2, 3, 4, 5].map((starIndex) => (
+      <Star
+        key={starIndex}
+        size={18}
+        className={`${
+          starIndex <= averageRating
+            ? "text-yellow-400 fill-current"
+            : "text-gray-300"
+        }`}
+      />
+    ));
+  };
 
   const user = useSession();
 
@@ -73,11 +108,24 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
         className="cursor-pointer pb-4"
         onClick={handleToggleCollapse}
       >
-        <CardTitle className="flex items-center justify-between gap-2 text-xl text-gray-800">
-          <div className="flex items-center gap-2">
-            <FileText className="h-6 w-6 text-blue-600" />
+        <CardTitle className="flex items-center gap-2 text-xl text-gray-800">
+          {/* Nome do Workshop cresce para ocupar o espaço disponível */}
+          <div className="flex items-center gap-2 flex-grow">
+            <FileText className="h-6 w-6 text-blue-600 " />
             {workshop.nome}
           </div>
+
+          {/* Estrelas alinhadas à direita */}
+          <div className="flex items-center gap-1 justify-end min-w-[100px] mr-4">
+            {renderStars()}
+            {ratingCount > 0 && (
+              <span className="text-sm text-gray-500 ml-1">
+                ({ratingCount})
+              </span>
+            )}
+          </div>
+
+          {/* Ícone de abrir/fechar */}
           {isCollapsed ? (
             <ChevronDown className="h-6 w-6 text-gray-500 transition-transform duration-300" />
           ) : (
