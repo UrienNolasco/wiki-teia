@@ -26,6 +26,7 @@ import { useSession } from "next-auth/react";
 import { useLastWorkshopStore } from "@/stores/progressStore";
 import { getAverageRating } from "@/app/actions/getrating";
 import { toast } from "react-toastify";
+import InitialWorkshop from "./initialworkshop";
 
 interface Workshop {
   id: string;
@@ -38,6 +39,7 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
   const { setLastWorkshop } = useLastWorkshopStore();
   const [averageRating, setAverageRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
+  const [isDialogOpen, setIsDialogOpen] = useState(true);
 
   useEffect(() => {
     setLastWorkshop(workshop.id);
@@ -80,7 +82,13 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
   }, [isCollapsed, workshop.id, setLastWorkshop]);
 
   const handleToggleCollapse = () => {
+    // Mantém a lógica de collapse se necessário
     setIsCollapsed((prev) => !prev);
+
+    // Abre o dialog apenas quando não estiver colapsado
+    if (isCollapsed) {
+      setIsDialogOpen(true);
+    }
   };
 
   const [isDone, setIsDone] = useState(workshop.done);
@@ -100,23 +108,6 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
     } catch (error) {
       console.error("Erro ao atualizar status do vídeo", error);
       setIsDone(!newDoneStatus); // Reverter em caso de erro
-    }
-  };
-
-  const handleRatingInteraction = (e: React.MouseEvent) => {
-    if (!isDone) {
-      e.preventDefault();
-      e.stopPropagation();
-      toast.error("Por favor, marque o vídeo como assistido antes de avaliar.");
-    }
-  };
-
-  const handleFeedbackClick = (e: React.MouseEvent) => {
-    if (!isDone) {
-      e.preventDefault();
-      toast.error(
-        "Por favor, marque o vídeo como assistido antes de acessar a devolutiva."
-      );
     }
   };
 
@@ -151,6 +142,7 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
           )}
         </CardTitle>
       </CardHeader>
+      <InitialWorkshop open={isDialogOpen} onOpenChange={setIsDialogOpen} />
 
       <motion.div
         initial={{ height: 0, opacity: 0 }}
