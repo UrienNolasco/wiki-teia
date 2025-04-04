@@ -5,9 +5,11 @@ import {
   AudioWaveform,
   BookOpen,
   Bot,
+  ChartArea,
   Command,
   Frame,
   GalleryVerticalEnd,
+  icons,
   Map,
   PieChart,
   School,
@@ -26,6 +28,7 @@ import {
 } from "@/components/ui/sidebar";
 import Team from "./team";
 import NavUser from "./nav-user";
+import { title } from "process";
 
 const data = {
   navMain: [
@@ -83,6 +86,17 @@ const data = {
         {
           title: "Team",
           url: "/settings/team",
+        },
+      ],
+    },
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: ChartArea,
+      items: [
+        {
+          title: "Acessar",
+          url: "/dashbord",
         },
       ],
     },

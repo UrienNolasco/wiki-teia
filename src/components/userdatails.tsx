@@ -29,7 +29,6 @@ interface UserDetailsProps {
   onUpdateCategory: (userId: string, category: TipoUsuario) => void;
 }
 
-// const categories = ["Aluno", "Admin", "Avaliador"];
 const categories = Object.values(TipoUsuario);
 
 const UserDatails = ({ user, onUpdateCategory }: UserDetailsProps) => {
@@ -46,7 +45,7 @@ const UserDatails = ({ user, onUpdateCategory }: UserDetailsProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Detalhes do Usuário</CardTitle>
+        <CardTitle>Defina a categoria do usuário</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex items-center space-x-4 mb-4">
