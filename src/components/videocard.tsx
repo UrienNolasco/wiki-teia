@@ -39,7 +39,7 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
   const { setLastWorkshop } = useLastWorkshopStore();
   const [averageRating, setAverageRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
-  const [isDialogOpen, setIsDialogOpen] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     setLastWorkshop(workshop.id);
@@ -82,12 +82,18 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
   }, [isCollapsed, workshop.id, setLastWorkshop]);
 
   const handleToggleCollapse = () => {
-    // Mantém a lógica de collapse se necessário
-    setIsCollapsed((prev) => !prev);
+    setIsCollapsed((prev) => {
+      if (prev === true) {
+        // Só abre o dialog quando está expandindo
+        setIsDialogOpen(true);
+      }
+      return !prev;
+    });
+  };
 
-    // Abre o dialog apenas quando não estiver colapsado
-    if (isCollapsed) {
-      setIsDialogOpen(true);
+  const handleDialogClose = (isCancel: boolean) => {
+    if (isCancel) {
+      setIsCollapsed(true); // Só fecha o card se for cancelamento
     }
   };
 
@@ -142,7 +148,14 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
           )}
         </CardTitle>
       </CardHeader>
-      <InitialWorkshop open={isDialogOpen} onOpenChange={setIsDialogOpen} />
+
+      {isDialogOpen && (
+        <InitialWorkshop
+          open={isDialogOpen}
+          onOpenChange={setIsDialogOpen}
+          onClose={handleDialogClose} // Nova prop
+        />
+      )}
 
       <motion.div
         initial={{ height: 0, opacity: 0 }}
