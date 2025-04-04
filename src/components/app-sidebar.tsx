@@ -82,7 +82,7 @@ const data = {
         },
         {
           title: "Team",
-          url: "#",
+          url: "/settings/team",
         },
       ],
     },
