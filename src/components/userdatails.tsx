@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   Select,
@@ -9,6 +15,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Button } from "./ui/button";
+import { TipoUsuario } from "@prisma/client";
 
 interface IUser {
   id: string;
@@ -19,13 +26,16 @@ interface IUser {
 
 interface UserDetailsProps {
   user: IUser;
-  onUpdateCategory: (userId: string, category: string) => void;
+  onUpdateCategory: (userId: string, category: TipoUsuario) => void;
 }
 
-const categories = ["Aluno", "Admin", "Avaliador"];
+// const categories = ["Aluno", "Admin", "Avaliador"];
+const categories = Object.values(TipoUsuario);
 
 const UserDatails = ({ user, onUpdateCategory }: UserDetailsProps) => {
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<TipoUsuario | "">(
+    ""
+  );
 
   const handleUpdate = () => {
     if (selectedCategory) {
@@ -55,24 +65,29 @@ const UserDatails = ({ user, onUpdateCategory }: UserDetailsProps) => {
           </div>
         </div>
         <Select
-          onValueChange={(value) => setSelectedCategory(value)}
+          onValueChange={(value) => setSelectedCategory(value as TipoUsuario)}
           value={selectedCategory}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Selecione uma categoria" />
           </SelectTrigger>
           <SelectContent>
-            {categories.map((category) => (
+            {categories.map((category: TipoUsuario) => (
               <SelectItem key={category} value={category}>
                 {category}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <Button className="mt-4 w-full" onClick={handleUpdate}>
+      </CardContent>
+      <CardFooter>
+        <Button
+          className="mt-4 w-full transform transition-all duration-300 hover:scale-[1.02] shadow-sm hover:shadow-md bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white"
+          onClick={handleUpdate}
+        >
           Atualizar Categoria
         </Button>
-      </CardContent>
+      </CardFooter>
     </Card>
   );
 };

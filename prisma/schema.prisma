@@ -155,6 +155,7 @@ enum TipoUsuario {
   Aluno
   Avaliador
   Administrador
+  Instrutor
 }
 
 enum TipoDevolutiva {
