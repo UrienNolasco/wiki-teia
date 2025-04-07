@@ -8,11 +8,30 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getProgressoCapacitacao } from "../actions/getprogressocapacitacao";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { CheckCircle, FileCheck, FileX, XCircle } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface ProgressoCapacitacao {
   totalWorkshops: number;
   concluidos: number;
   progresso: number;
+  workshops: Array<{
+    id: string;
+    nome: string;
+    startedAt: Date | null;
+    done: boolean;
+    doneAt: Date | null;
+    truedone: boolean;
+    truedoneAt: Date | null;
+  }>;
 }
 
 interface IUser {
@@ -123,20 +142,94 @@ const Dashbord = () => {
                   <CardHeader>
                     <CardTitle>Progresso - {selectedCapacitacao}</CardTitle>
                     <CardContent>
-                      <div className="mt-4 space-y-2">
-                        <p>
-                          Total de workshops: {progressoUsuario.totalWorkshops}
-                        </p>
-                        <p>Concluídos: {progressoUsuario.concluidos}</p>
-                      </div>
+                      <Table className="border rounded-lg overflow-hidden">
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="min-w-[250px]">
+                              Workshop
+                            </TableHead>
+                            <TableHead className="w-[150px]">Início</TableHead>
+                            <TableHead className="w-[150px]">
+                              Assistido
+                            </TableHead>
+                            <TableHead className="w-[150px]">
+                              Devolutiva
+                            </TableHead>
+                          </TableRow>
+                        </TableHeader>
+
+                        <TableBody>
+                          {progressoUsuario.workshops.map((workshop) => (
+                            <TableRow
+                              key={workshop.id}
+                              className="table-row-hover"
+                            >
+                              <TableCell className="font-medium">
+                                {workshop.nome}
+                              </TableCell>
+
+                              <TableCell>
+                                {workshop.startedAt
+                                  ? new Date(
+                                      workshop.startedAt
+                                    ).toLocaleDateString("pt-BR")
+                                  : "Não iniciado"}
+                              </TableCell>
+
+                              <TableCell>
+                                <div className="flex items-center gap-2">
+                                  {workshop.done ? (
+                                    <>
+                                      <CheckCircle className="h-5 w-5 text-green-500" />
+                                      <span className="text-sm text-gray-500">
+                                        {new Date(
+                                          workshop.doneAt!
+                                        ).toLocaleDateString("pt-BR")}
+                                      </span>
+                                    </>
+                                  ) : (
+                                    <XCircle className="h-5 w-5 text-red-500" />
+                                  )}
+                                </div>
+                              </TableCell>
+
+                              <TableCell>
+                                <div className="flex items-center gap-2">
+                                  {workshop.truedone ? (
+                                    <>
+                                      <FileCheck className="h-5 w-5 text-blue-500" />
+                                      <span className="text-sm text-gray-500">
+                                        {new Date(
+                                          workshop.truedoneAt!
+                                        ).toLocaleDateString("pt-BR")}
+                                      </span>
+                                    </>
+                                  ) : (
+                                    <FileX className="h-5 w-5 text-gray-400" />
+                                  )}
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+
+                        <TableFooter>
+                          <TableRow>
+                            <TableCell colSpan={2} className="font-medium">
+                              Total de workshops:{" "}
+                              {progressoUsuario.totalWorkshops}
+                            </TableCell>
+                            <TableCell colSpan={2} className="text-right">
+                              Concluídos: {progressoUsuario.concluidos} (
+                              {progressoUsuario.progresso}%)
+                            </TableCell>
+                          </TableRow>
+                        </TableFooter>
+                      </Table>
                     </CardContent>
                   </CardHeader>
                 </Card>
               )}
-              {/* Espaço reservado para gráficos */}
-              <div className="mt-4 p-4 bg-white rounded-lg">
-                <p className="text-gray-500">Área para gráficos</p>
-              </div>
             </div>
           </div>
         </main>

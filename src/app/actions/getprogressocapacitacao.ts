@@ -7,44 +7,72 @@ interface getProgressoCapacitacaoProps {
   nomeCapacitacao: string;
 }
 
-// Interface para o retorno
+interface WorkshopProgresso {
+  id: string;
+  nome: string;
+  startedAt: Date | null;
+  done: boolean;
+  doneAt: Date | null;
+  truedone: boolean;
+  truedoneAt: Date | null;
+}
+
 interface ProgressoCapacitacao {
   totalWorkshops: number;
   concluidos: number;
   progresso: number;
+  workshops: WorkshopProgresso[];
 }
 
 export const getProgressoCapacitacao = async ({
   userId,
   nomeCapacitacao,
 }: getProgressoCapacitacaoProps): Promise<ProgressoCapacitacao> => {
-  // Primeiro verifica se a capacitação existe
   const capacitacao = await db.capacitacao.findFirst({
     where: { nome: nomeCapacitacao },
-    select: { id: true },
+    include: {
+      workshops: {
+        include: {
+          progressoWorkshop: {
+            where: { usuarioId: userId },
+          },
+        },
+        orderBy: {
+          nome: "asc",
+        },
+      },
+    },
   });
 
   if (!capacitacao) {
-    return { totalWorkshops: 0, concluidos: 0, progresso: 0 };
+    return {
+      totalWorkshops: 0,
+      concluidos: 0,
+      progresso: 0,
+      workshops: [],
+    };
   }
 
-  // Busca os totais em paralelo para melhor performance
-  const [totalWorkshops, concluidos] = await Promise.all([
-    db.workshop.count({
-      where: { capacitacaoId: capacitacao.id },
-    }),
+  const workshopsComProgresso = capacitacao.workshops.map((workshop) => ({
+    id: workshop.id,
+    nome: workshop.nome,
+    startedAt: workshop.progressoWorkshop[0]?.startedAt || null,
+    done: workshop.progressoWorkshop[0]?.done || false,
+    doneAt: workshop.progressoWorkshop[0]?.doneAt || null,
+    truedone: workshop.progressoWorkshop[0]?.truedone || false,
+    truedoneAt: workshop.progressoWorkshop[0]?.truedoneAt || null,
+  }));
 
-    db.progressoWorkshop.count({
-      where: {
-        usuarioId: userId,
-        done: true,
-        workshop: { capacitacaoId: capacitacao.id },
-      },
-    }),
-  ]);
+  const totalWorkshops = workshopsComProgresso.length;
+  const concluidos = workshopsComProgresso.filter((w) => w.done).length;
 
   const progresso =
     totalWorkshops > 0 ? Math.round((concluidos / totalWorkshops) * 100) : 0;
 
-  return { totalWorkshops, concluidos, progresso };
+  return {
+    totalWorkshops,
+    concluidos,
+    progresso,
+    workshops: workshopsComProgresso,
+  };
 };

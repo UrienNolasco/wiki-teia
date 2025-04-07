@@ -139,3 +139,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .table-row-hover:hover td {
+    @apply bg-gray-50 dark:bg-gray-800 transition-colors;
+  }
+}
