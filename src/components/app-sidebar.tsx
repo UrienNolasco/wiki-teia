@@ -80,11 +80,11 @@ const data = {
       icon: Settings2,
       items: [
         {
-          title: "General",
-          url: "#",
+          title: "Aprovação de Devolutivas",
+          url: "/settings/approvals",
         },
         {
-          title: "Team",
+          title: "Gerenciamento de Funções",
           url: "/settings/team",
         },
       ],

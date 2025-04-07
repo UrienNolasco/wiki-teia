@@ -8,7 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getProgressoCapacitacao } from "../actions/getprogressocapacitacao";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { CheckCircle, FileCheck, FileX, XCircle } from "lucide-react";
+import {
+  CalendarDays,
+  CheckCircle,
+  FileCheck,
+  FileX,
+  XCircle,
+} from "lucide-react";
 import {
   Table,
   TableBody,
@@ -18,6 +24,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 interface ProgressoCapacitacao {
   totalWorkshops: number;
@@ -176,38 +187,83 @@ const Dashbord = () => {
                                   : "Não iniciado"}
                               </TableCell>
 
+                              {/* Assistido com Hover */}
                               <TableCell>
-                                <div className="flex items-center gap-2">
-                                  {workshop.done ? (
-                                    <>
-                                      <CheckCircle className="h-5 w-5 text-green-500" />
-                                      <span className="text-sm text-gray-500">
-                                        {new Date(
-                                          workshop.doneAt!
-                                        ).toLocaleDateString("pt-BR")}
+                                <HoverCard>
+                                  <HoverCardTrigger asChild>
+                                    <div className="flex items-center gap-2 cursor-pointer">
+                                      {workshop.done ? (
+                                        <>
+                                          <CheckCircle className="h-5 w-5 text-green-500" />
+                                        </>
+                                      ) : (
+                                        <XCircle className="h-5 w-5 text-red-500" />
+                                      )}
+                                    </div>
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className="w-64">
+                                    <div className="flex items-center gap-2">
+                                      <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                                      <span className="text-sm text-muted-foreground">
+                                        {workshop.done
+                                          ? `Assistido em ${new Date(
+                                              workshop.doneAt!
+                                            ).toLocaleDateString("pt-BR")}`
+                                          : "Não assistido"}
                                       </span>
-                                    </>
-                                  ) : (
-                                    <XCircle className="h-5 w-5 text-red-500" />
-                                  )}
-                                </div>
+                                    </div>
+                                  </HoverCardContent>
+                                </HoverCard>
                               </TableCell>
 
+                              {/* Devolutiva com Hover */}
                               <TableCell>
-                                <div className="flex items-center gap-2">
-                                  {workshop.truedone ? (
-                                    <>
-                                      <FileCheck className="h-5 w-5 text-blue-500" />
-                                      <span className="text-sm text-gray-500">
-                                        {new Date(
-                                          workshop.truedoneAt!
-                                        ).toLocaleDateString("pt-BR")}
+                                <HoverCard>
+                                  <HoverCardTrigger asChild>
+                                    <div className="flex items-center gap-2 cursor-pointer">
+                                      {workshop.truedone ? (
+                                        <>
+                                          <FileCheck className="h-5 w-5 text-blue-500" />
+                                          <span className="text-sm text-gray-500">
+                                            {new Date(
+                                              workshop.truedoneAt!
+                                            ).toLocaleDateString("pt-BR")}
+                                          </span>
+                                        </>
+                                      ) : (
+                                        <FileX
+                                          className={`h-5 w-5 ${
+                                            workshop.done
+                                              ? "text-orange-500"
+                                              : workshop.truedone
+                                              ? "text-green-500"
+                                              : "text-gray-400"
+                                          }`}
+                                        />
+                                      )}
+                                    </div>
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className="w-64">
+                                    <div className="flex items-center gap-2">
+                                      <span
+                                        className={`w-3 h-3 rounded-full ${
+                                          workshop.truedone
+                                            ? "bg-green-500"
+                                            : workshop.done
+                                            ? "bg-orange-500"
+                                            : "bg-gray-400"
+                                        }`}
+                                      />
+                                      <span className="text-sm text-muted-foreground">
+                                        {workshop.truedone
+                                          ? "Devolutiva aprovada"
+                                          : workshop.done
+                                          ? "Aguardando envio"
+                                          : "Usuário ainda não assistiu"}
                                       </span>
-                                    </>
-                                  ) : (
-                                    <FileX className="h-5 w-5 text-gray-400" />
-                                  )}
-                                </div>
+                                    </div>
+                                  </HoverCardContent>
+                                </HoverCard>
                               </TableCell>
                             </TableRow>
                           ))}

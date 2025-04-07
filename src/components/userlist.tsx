@@ -17,7 +17,7 @@ interface UserListProps {
 
 const UserList = ({ users, onSelect, selectedUserId }: UserListProps) => {
   return (
-    <ScrollArea className="h-full">
+    <ScrollArea className="h-full ">
       {users.map((user) => (
         <Card
           key={user.id}
