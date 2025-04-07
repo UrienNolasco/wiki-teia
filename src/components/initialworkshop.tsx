@@ -41,7 +41,7 @@ const InitialWorkshop = ({
 
       <DialogContent
         onInteractOutside={(e) => e.preventDefault()} // Impede o fechamento ao clicar fora
-        className="border-0 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl overflow-hidden  backdrop:bg-black/50 p-6"
+        className="border-0 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl overflow-hidden  backdrop:bg-black/50 p-6 [&>button]:hidden"
       >
         {/* Decoração de fundo */}
 
