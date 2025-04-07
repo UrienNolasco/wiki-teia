@@ -10,21 +10,36 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
+import { toast } from "react-toastify";
+import { startWorkshop } from "@/app/actions/startworkshop";
 
 interface InitialWorkshopProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onClose?: (isCancel: boolean) => void; // Nova prop
+  onClose?: (isCancel: boolean) => void;
+  usuarioId: string; // Nova prop
+  workshopId: string; // Nova prop
 }
 
 const InitialWorkshop = ({
   open,
   onOpenChange,
   onClose,
+  usuarioId, // Nova prop
+  workshopId, // Nova prop
 }: InitialWorkshopProps) => {
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     onOpenChange(false);
     onClose?.(false); // Não é cancelamento
+    try {
+      await startWorkshop({ usuarioId, workshopId });
+      toast.success("Workshop iniciado com sucesso!");
+      onOpenChange(false);
+      onClose?.(false);
+    } catch (error) {
+      console.error("Erro ao iniciar o workshop:", error);
+      toast.error("Erro ao iniciar o workshop. Tente novamente mais tarde.");
+    }
   };
 
   const handleCancel = () => {

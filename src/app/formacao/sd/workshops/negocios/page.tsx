@@ -33,6 +33,7 @@ const Workshops = async () => {
   const workshopsComProgresso = workshops.map((workshop) => ({
     ...workshop,
     done: workshop.progressoWorkshop.some((pw) => pw.done),
+    startedAt: workshop.progressoWorkshop[0]?.startedAt || null, // Adiciona o startedAt
   }));
 
   return (

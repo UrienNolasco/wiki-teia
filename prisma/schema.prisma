@@ -19,7 +19,6 @@ model User {
   accounts                            Account[]
   Avaliacao                           Avaliacao[]
   Devolutiva_Devolutiva_alunoIdToUser Devolutiva[]
-  ProgressoVideo                      ProgressoVideo[]
   ProgressoWorkshop                   ProgressoWorkshop[]
   sessions                            Session[]
 
@@ -103,18 +102,9 @@ model Devolutiva {
   avaliacao     Avaliacao[]
   aluno         User             @relation(fields: [alunoId], references: [id], onDelete: Cascade)
   workshop      Workshop         @relation(fields: [workshopId], references: [id], onDelete: Cascade)
-  progresso     ProgressoVideo[]
 }
 
-model ProgressoVideo {
-  id                 String     @id @default(uuid())
-  devolutivaId       String
-  usuarioId          String
-  tempo_assistido    Int
-  ultima_atualizacao DateTime   @default(now())
-  devolutiva         Devolutiva @relation(fields: [devolutivaId], references: [id], onDelete: Cascade)
-  usuario            User       @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
-}
+
 
 model Avaliacao {
   id           String     @id @default(uuid())
@@ -131,6 +121,10 @@ model ProgressoWorkshop {
   usuarioId  String
   workshopId String
   done       Boolean  @default(false)
+  truedone   Boolean  @default(false) // Novo campo
+  startedAt  DateTime? // Novo campo
+  doneAt     DateTime? // Novo campo
+  truedoneAt DateTime? // Novo campo
   usuario    User     @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   workshop   Workshop @relation(fields: [workshopId], references: [id], onDelete: Cascade)
 
@@ -166,6 +160,7 @@ enum TipoDevolutiva {
 
 enum StatusDevolutiva {
   Enviado
+  Aguardando
   Aprovado
-  Rejeitado
+  Revisão
 }

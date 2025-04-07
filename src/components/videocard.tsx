@@ -27,12 +27,14 @@ import { useLastWorkshopStore } from "@/stores/progressStore";
 import { getAverageRating } from "@/app/actions/getrating";
 
 import InitialWorkshop from "./initialworkshop";
+import { toast } from "react-toastify";
 
 interface Workshop {
   id: string;
   nome: string;
   link_video: string;
   done: boolean;
+  startedAt?: Date | null;
 }
 
 export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
@@ -84,8 +86,8 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
   const handleToggleCollapse = () => {
     setIsCollapsed((prev) => {
       const newState = !prev;
-      // Só abre o dialog quando está expandindo E o workshop não está completo
-      if (prev === true && newState === false && !isDone) {
+      // Verifica se está expandindo E se não tem startedAt
+      if (prev === true && newState === false && !workshop.startedAt) {
         setIsDialogOpen(true);
       }
       return newState;
@@ -112,9 +114,13 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
         workshopId: workshop.id,
         done: newDoneStatus,
       });
+      toast.success(
+        "Alteração no estado de visto do vídeo realizada com sucesso!"
+      );
     } catch (error) {
       console.error("Erro ao atualizar status do vídeo", error);
       setIsDone(!newDoneStatus); // Reverter em caso de erro
+      toast.error("Erro ao marcar video como visto!");
     }
   };
 
@@ -154,7 +160,9 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
         <InitialWorkshop
           open={isDialogOpen}
           onOpenChange={setIsDialogOpen}
-          onClose={handleDialogClose} // Nova prop
+          onClose={handleDialogClose}
+          usuarioId={user.data?.user.id ?? ""}
+          workshopId={workshop.id}
         />
       )}
 

@@ -18,8 +18,13 @@ export const switchVideo = async ({
       where: {
         usuarioId_workshopId: { usuarioId, workshopId },
       },
-      update: { done },
-      create: { usuarioId, workshopId, done },
+      update: { done, doneAt: done ? new Date() : null },
+      create: {
+        usuarioId,
+        workshopId,
+        done,
+        doneAt: done ? new Date() : null,
+      },
     });
   } catch (error) {
     console.error("Erro ao atualizar vídeo:", error);
