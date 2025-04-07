@@ -25,7 +25,7 @@ import { switchVideo } from "@/app/actions/switchVideo";
 import { useSession } from "next-auth/react";
 import { useLastWorkshopStore } from "@/stores/progressStore";
 import { getAverageRating } from "@/app/actions/getrating";
-import { toast } from "react-toastify";
+
 import InitialWorkshop from "./initialworkshop";
 
 interface Workshop {
@@ -83,11 +83,12 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
 
   const handleToggleCollapse = () => {
     setIsCollapsed((prev) => {
-      if (prev === true) {
-        // Só abre o dialog quando está expandindo
+      const newState = !prev;
+      // Só abre o dialog quando está expandindo E o workshop não está completo
+      if (prev === true && newState === false && !isDone) {
         setIsDialogOpen(true);
       }
-      return !prev;
+      return newState;
     });
   };
 
