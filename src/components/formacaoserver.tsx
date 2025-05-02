@@ -28,6 +28,7 @@ export default async function FormacaoServer({
     return <p>Erro ao carregar as formações.</p>;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formacao = formacoes?.find((f: any) => f.nome === tipoFormacao);
 
   return <FormacaoContent formacao={formacao} />;

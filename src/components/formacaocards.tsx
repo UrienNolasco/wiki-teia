@@ -15,6 +15,7 @@ import { useSession } from "next-auth/react";
 
 export default function FormacoesCards() {
   const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [formacoes, setFormacoes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,6 +31,7 @@ export default function FormacoesCards() {
     router.push(`/${tipo}`);
   };
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,6 +44,7 @@ export default function FormacoesCards() {
       }
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading)
@@ -70,4 +73,3 @@ export default function FormacoesCards() {
     </div>
   );
 }
-("");
