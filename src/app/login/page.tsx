@@ -5,9 +5,7 @@ import Contato from "@/components/contato";
 import Hero from "@/components/hero";
 import Objetivos from "@/components/objetivos";
 import Recursos from "@/components/recursos";
-import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
-import Image from "next/image";
+
 
 const LoginPage = () => {
   return (

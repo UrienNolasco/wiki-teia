@@ -5,7 +5,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
+
 } from "./ui/sidebar";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

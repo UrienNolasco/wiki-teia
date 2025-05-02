@@ -1,6 +1,5 @@
 import { Separator } from "./ui/separator";
 import { SidebarTrigger } from "./ui/sidebar";
-import Image from "next/image";
 
 export function Header() {
   return (
@@ -9,13 +8,6 @@ export function Header() {
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mr-2 h-4" />
       </div>
-      <Image
-        src={"/squareshomepage1.svg"}
-        alt="Home"
-        width={300}
-        height={200}
-        className="absolute top-0 right-0"
-      />
     </header>
   );
 }

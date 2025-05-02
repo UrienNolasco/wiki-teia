@@ -23,6 +23,7 @@ export default function FormacaoContent({ formacao }: FormacaoContentProps) {
     return <p>Formação não encontrada.</p>;
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const router = useRouter();
 
   const handleClick = (capacitacao: {

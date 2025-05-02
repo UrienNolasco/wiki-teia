@@ -1,21 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  ChartArea,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  icons,
-  Map,
-  PieChart,
-  School,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react";
+import { BookOpen, ChartArea, School, Settings2 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 
@@ -28,7 +14,6 @@ import {
 } from "@/components/ui/sidebar";
 import Team from "./team";
 import NavUser from "./nav-user";
-import { title } from "process";
 
 const data = {
   navMain: [

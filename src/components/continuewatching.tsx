@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { Card, CardContent, CardFooter, CardTitle } from "./ui/card";
+import { Card, CardTitle } from "./ui/card";
 import { useRouter } from "next/navigation";
 import { getWorkshop } from "@/app/actions/getworkshop";
 import { useLastWorkshopStore } from "@/stores/progressStore";
