@@ -62,6 +62,7 @@ export default function CapacitacoesCards() {
       }
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   if (loading)
