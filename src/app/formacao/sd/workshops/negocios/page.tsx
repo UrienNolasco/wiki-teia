@@ -24,17 +24,27 @@ const Workshops = async () => {
           usuarioId: userId,
         },
       },
+      AvaliacaoWorkshop: true, // ⬅ Aqui incluímos as avaliações
     },
     orderBy: {
       nome: "asc",
     },
   });
 
-  const workshopsComProgresso = workshops.map((workshop) => ({
-    ...workshop,
-    done: workshop.progressoWorkshop.some((pw) => pw.done),
-    startedAt: workshop.progressoWorkshop[0]?.startedAt || null, // Adiciona o startedAt
-  }));
+  const workshopsComProgresso = workshops.map((workshop) => {
+    const ratings = workshop.AvaliacaoWorkshop.map((a) => a.rating);
+    const total = ratings.length;
+    const average =
+      total > 0 ? ratings.reduce((sum, val) => sum + val, 0) / total : 0;
+
+    return {
+      ...workshop,
+      done: workshop.progressoWorkshop.some((pw) => pw.done),
+      startedAt: workshop.progressoWorkshop[0]?.startedAt || null,
+      averageRating: Math.round(average),
+      ratingCount: total,
+    };
+  });
 
   return (
     <SidebarLayout>

@@ -24,7 +24,6 @@ import FooterAvaliation from "./footeravaliation";
 import { switchVideo } from "@/app/actions/switchVideo";
 import { useSession } from "next-auth/react";
 import { useLastWorkshopStore } from "@/stores/progressStore";
-import { getAverageRating } from "@/app/actions/getrating";
 
 import InitialWorkshop from "./initialworkshop";
 import { toast } from "react-toastify";
@@ -35,39 +34,26 @@ interface Workshop {
   link_video: string;
   done: boolean;
   startedAt?: Date | null;
+  averageRating?: number;
+  ratingCount?: number;
 }
 
 export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
   const { setLastWorkshop } = useLastWorkshopStore();
-  const [averageRating, setAverageRating] = useState(0);
-  const [ratingCount, setRatingCount] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     setLastWorkshop(workshop.id);
   }, [workshop.id, setLastWorkshop]);
 
-  useEffect(() => {
-    const fetchRating = async () => {
-      const { average, count } = await getAverageRating({
-        workshopId: workshop.id,
-      });
-      setAverageRating(Math.round(average));
-      setRatingCount(count);
-    };
-
-    fetchRating();
-  }, [workshop.id]);
-
   const renderStars = () => {
+    const rating = workshop.averageRating || 0;
     return [1, 2, 3, 4, 5].map((starIndex) => (
       <Star
         key={starIndex}
         size={18}
         className={`${
-          starIndex <= averageRating
-            ? "text-yellow-400 fill-current"
-            : "text-gray-300"
+          starIndex <= rating ? "text-yellow-400 fill-current" : "text-gray-300"
         }`}
       />
     ));
@@ -140,11 +126,9 @@ export const VideoCard = ({ workshop }: { workshop: Workshop }) => {
           {/* Estrelas alinhadas à direita */}
           <div className="flex items-center gap-1 justify-end min-w-[100px] mr-4">
             {renderStars()}
-            {ratingCount > 0 && (
-              <span className="text-sm text-gray-500 ml-1">
-                ({ratingCount})
-              </span>
-            )}
+            <span className="text-sm text-gray-500 ml-1">
+              ({workshop.ratingCount ?? 0})
+            </span>
           </div>
 
           {/* Ícone de abrir/fechar */}
