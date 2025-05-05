@@ -2,10 +2,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   experimental: {
-    serverComponentsExternalPackages: ["@next-auth/prisma-adapter"], // Apenas se usar Prisma
+    serverComponentsExternalPackages: [
+      "@prisma/client",
+      "@next-auth/prisma-adapter",
+    ], // Adicione ambos
   },
   typescript: {
-    ignoreBuildErrors: true, // Opcional (caso tenha erros de TypeScript no build)
+    ignoreBuildErrors: true, // Temporário (remova depois que resolver)
   },
 };
 
